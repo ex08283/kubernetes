@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+# This is a simple example of a ReplicaSet configuration file.
+metadata:
+  name: nginx-rs
+  labels:
+    env: demo
+spec: 
+  template:
+    metadata:
+      labels:
+        env: demo
+      name: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+  replicas: 5
+  selector:
+    matchLabels:
+      env: demo
