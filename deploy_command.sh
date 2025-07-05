@@ -53,3 +53,8 @@ kubectl.exe rollout history deploy/nginx-deploy
 # This will undo the last rollout of the deployment, reverting to the previous version
 kubectl.exe rollout undo deploy/nginx-deploy
 
+# This will create a deployment named nginx-deploy with the nginx image, but it won't actually create it
+kubectl.exe create deploy deploy/nginx-deploy --dry-run=client --image=nginx
+
+# This will create a deployment named nginx-deploy with the nginx image and output the YAML to a file
+kubectl.exe create deploy deploy/nginx-deploy --image=nginx --dry-run=client -o yaml > deployment.yaml
