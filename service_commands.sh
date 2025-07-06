@@ -39,3 +39,11 @@ kubectl.exe get svc --field-selector spec.type=LoadBalancer
 
 # To delete the service, use the following command
 k delete svc lb-svc
+
+# Creating the load balancer service imperatively
+# This will create a service named lb-svc that selects pods with the label env=demo
+# Lets the deployment figure out the selector automatically
+kubectl.exe expose deployment nginx-deploy --type=LoadBalancer --name=lb-svc --port=80
+
+# To get the YAML of the service
+k get service lb-svc -o yaml > lb-svc.yaml

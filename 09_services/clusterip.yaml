@@ -1,3 +1,8 @@
+#clusterip is internal to the cluster, nodeport is external to the cluster
+# A ClusterIP service in Kubernetes is the default type of service that exposes a set of Pods 
+# to other services within the cluster. It is not accessible from outside the cluster.
+# Endpoints of a ClusterIP service can only be accessed from within the cluster.
+# Endpoints are the IP addresses of the Pods that are selected by the service.
 apiVersion: v1                  # This specifies the API version of the Kubernetes object
 kind: Service
 metadata:

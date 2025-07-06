@@ -1,3 +1,5 @@
+#A NodePort service in Kubernetes is one of the ways to expose a Pod 
+#(or a set of Pods) to external traffic — i.e., outside the cluster.
 apiVersion: v1                  # This specifies the API version of the Kubernetes object
 kind: Service
 metadata:
