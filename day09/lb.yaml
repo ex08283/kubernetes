@@ -1,0 +1,19 @@
+# A LoadBalancer service in Kubernetes is used to expose a set of Pods to external traffic
+# (i.e., outside the cluster) and is typically used in cloud environments where a load balancer can be provisioned.
+# This service type automatically provisions a cloud load balancer that routes traffic to the Pods selected by the service.
+# The LoadBalancer service type is useful for production environments where you want to expose your application to
+apiVersion: v1                  # This specifies the API version of the Kubernetes object
+kind: Service
+metadata:
+  name: lb-svc
+  labels:
+    env: demo                   # This label will be used to select the pods that this service will route traffic to
+spec:
+  type: LoadBalancer         # This specifies that the service will be exposed via a load balancer
+  # Note: LoadBalancer type is typically used in cloud environments where a load balancer can              
+  ports:
+    - port: 80                  # This is the port that the service will expose
+      #targetPort: 80            # This is not needed for LoadBalancer type, but included for clarity
+      # nodePort: 30001          # This line is not needed for LoadBalancer type, as it is managed by the cloud provider
+  selector:                      # This tells the service which pods to route traffic to
+    env: demo                    # This will select pods with the label env=demo

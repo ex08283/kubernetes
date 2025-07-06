@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2025-07-06T12:33:56Z"
+  labels:
+    env: demo
+  name: lb-svc
+  namespace: default
+  resourceVersion: "21747"
+  uid: c6a964db-c1a3-49c9-8e5c-1b9c4cdab26a
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 10.96.102.8
+  clusterIPs:
+  - 10.96.102.8
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - nodePort: 31122
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    env: demo
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}

@@ -4,18 +4,18 @@ kind: Deployment
 metadata:
   name: nginx-deploy
   labels:
-    env: demo
-spec: 
-  template:
-    metadata:
-      labels:
-        env: demo
-      name: nginx
+    env: demo         # This label will be used to select the pods that this deployment will manage
+spec:                 # This is the specification for the deployment
+  template:           # This is the pod template that will be used to create the pods
+    metadata:         # This metadata will be applied to the pods created by this deployment
+      labels:         # Labels are key-value pairs that are attached to objects, such as pods, and can be used to select and filter them
+        env: demo     # This label will be used to select the pods that this deployment will manage
+      name: nginx      # This is the name of the pod template, which will be used to create the pods
     spec:
-      containers:
-      - image: nginx
-        name: nginx
-  replicas: 3
-  selector:
-    matchLabels:
-      env: demo
+      containers:     # This is the specification for the containers that will be created in the pods
+      - image: nginx  # This is the image that will be used to create the container
+        name: nginx   # This is the name of the container
+  replicas: 3         # This specifies the number of replicas that will be created for this deployment
+  selector:           # This is the selector that will be used to select the pods that this deployment will manage
+    matchLabels:       # This is the label selector that will be used to select the pods that this deployment will manage
+      env: demo       # This label will be used to select the pods that this deployment will manage

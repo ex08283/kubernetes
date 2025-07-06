@@ -1,0 +1,12 @@
+apiVersion: v1                  # This specifies the API version of the Kubernetes object
+kind: Service
+metadata:
+  name: clusterip-svc
+  labels:
+    env: demo                   # This label will be used to select the pods that this service will route traffic to
+spec:
+  ports:
+    - port: 80                  # This is the port that the service will expose
+      targetPort: 80
+  selector:                      # This tells the service which pods to route traffic to
+    env: demo                    # This will select pods with the label env=demo
