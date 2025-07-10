@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: DaemonSet # DaemonSet ensures that all (or some) Nodes run a copy of a Pod
+metadata:
+  name: nginx-ds
+  labels:
+    env: demo
+spec:
+  selector: # label selector to identify the Pods managed by this DaemonSet
+    matchLabels:
+      env: demo # label that matches the Pods created by this DaemonSet
+  template: # template for the Pod managed by the DaemonSet
+    metadata:
+      labels:
+        env: demo # label for the Pod
+      name: nginx
+    spec:
+      containers: # list of containers in the Pod
+      - name: nginx # name of the container
+        image: nginx
+        ports: # ports exposed by the container
+        - containerPort: 80 # port exposed by the container

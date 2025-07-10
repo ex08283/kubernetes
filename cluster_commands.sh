@@ -7,7 +7,7 @@ kind create cluster \
 
 kind create cluster \
   --image kindest/node:v1.32.5@sha256:e3b2327e3a5ab8c76f5ece68936e4cafaa82edf58486b769727ab0b3b97a5b0d \
-  --name cka-cluster2
+  --name cka-cluster2 \
   --config cluster_config.yaml
 
 kind delete cluster --name cka-cluster2
