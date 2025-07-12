@@ -19,3 +19,11 @@ spec:
         image: nginx
         ports: # ports exposed by the container
         - containerPort: 80 # port exposed by the container
+
+
+# Explanation:
+# A DaemonSet makes sure that one pod copy runs on each (or selected) node.
+# It's commonly used for node-level services like logging, monitoring, or networking.
+# Kubernetes constantly monitors these pods.
+# If a pod managed by this DaemonSet is deleted or crashes, Kubernetes automatically recreates it on the same node.
+# This ensures that the DaemonSet's desired state — one pod per node — is always maintained.
