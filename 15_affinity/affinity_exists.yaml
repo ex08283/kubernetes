@@ -1,0 +1,30 @@
+#operator: Exists  # Operator to check if the label exists
+# No values specified, meaning any value for the disktype label is acceptable
+# this pod will only be scheduled on nodes that have the disktype label, regardless of its value.
+# if no nodes have the disktype label, the pod will not be scheduled.
+# this is useful for ensuring that the pod runs on nodes with specific characteristics, such as storage type or performance capabilities.
+# existing pods will not be affected by these changes, only new pods will be scheduled based on these requirements.
+# if no nodes match the required rules, the pod will not be scheduled at all.
+# values:  # No specific values needed, just the existence of the label is required
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: redis
+  name: redis3
+spec:
+  containers:
+  - image: redis
+    name: redis
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  affinity:
+    nodeAffinity:     # Node affinity rules for scheduling, specifying which nodes the pod can run on
+      preferredDuringSchedulingIgnoredDuringExecution:  # Preferred node affinity rules, will try to schedule on these nodes if possible
+        - weight: 100  # Weight of the preference, higher means more preferred
+          preference:  # Preference for node labels
+            matchExpressions:  # Match expressions for node labels
+            - key: disktype    # Key of the label to match
+              operator: Exists

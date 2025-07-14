@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: redis
+  name: redis
+spec:
+  containers:
+  - image: redis
+    name: redis
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  affinity:
+    nodeAffinity:     # Node affinity rules for scheduling, specifying which nodes the pod can run on
+      requiredDuringSchedulingIgnoredDuringExecution:  # Required node affinity rules
+        nodeSelectorTerms:    # List of node selector terms
+        - matchExpressions:    # Match expressions for node labels
+          - key: disktype      # Key of the label to match
+            operator: In
+            values:
+            - ssd
