@@ -1,0 +1,23 @@
+# This file shows a Kubernetes Pod configuration that requests and limits memory resources.
+# It is used to demonstrate how to set memory requests and limits for a container. 
+# The configuration includes a command to stress the memory usage of the container.
+# It is important to ensure that the memory requests and limits are set appropriately to avoid resource contention in the cluster.
+# Status will be pending due to the memory request exceeding node capacity.
+# The memory requested is more than the available memory on the node, which will prevent the pod from being scheduled.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: memory-demo3
+  namespace: mem-example
+spec:
+  containers:
+  - name: memory-demo3-ctr
+    image: polinux/stress # Using the polinux/stress image to simulate memory usage
+    resources:
+      requests:
+        memory: "1000Gi" # requesting 1000Gi of memory, more than node capacity
+      limits:
+        memory: "1000Gi" # requesting 1000Gi of memory, more than node capacity
+    # Command to stress the memory usage
+    command: ["stress"]
+    args: ["--vm", "1", "--vm-bytes", "250M", "--vm-hang", "1"] # This command will create a virtual machine that consumes 250Mi of memory and hangs for 1 second.
