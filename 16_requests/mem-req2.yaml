@@ -3,6 +3,7 @@
 # The configuration includes a command to stress the memory usage of the container.
 # It is important to ensure that the memory requests and limits are set appropriately to avoid resource contention in the cluster.
 # Status will be OOMKilled due to consuming more memory than the limit.
+# this simulated an application that consumes more memory than the limit set in the pod configuration.
 apiVersion: v1
 kind: Pod
 metadata:

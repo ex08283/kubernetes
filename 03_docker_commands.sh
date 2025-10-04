@@ -85,3 +85,25 @@ docker stop infallible_leakey
 # Useful for debugging, networking, volume info, etc.
 # ------------------------------
 docker inspect ddfa5d0e61c9
+
+
+
+
+# ------------------------------
+# azure commands
+az login --tenant dcaf4ed4-1e04-420d-b187-c5aa3676d0ae
+
+az acr login --name djregistry
+
+docker ps -a
+
+docker stop <container_id or name>
+
+docker pull djregistry.azurecr.io/frontend:95
+
+docker run -dp 3000:3000 djregistry.azurecr.io/frontend:95
+
+docker exec -it <container_id or name> sh
+
+
+
