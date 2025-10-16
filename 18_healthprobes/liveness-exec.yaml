@@ -1,0 +1,33 @@
+apiVersion: v1                                         # API version for core Kubernetes resources
+kind: Pod                                              # Defines this object as a Pod
+metadata:
+  name: liveness-command                               # Name of the Pod
+  labels:
+    test: liveness                                     # Label used to categorize or filter this Pod
+
+spec:
+  containers:                                          # List of containers in the Pod
+  - name: liveness                                     # Name of the container
+    image: docker.io/library/busybox:1.36              # ✅ Updated BusyBox image (manifest v2 compatible)
+    args:                                              # Command arguments to run when the container starts
+    - /bin/sh                                          # Use the shell
+    - -c                                               # Execute the following string as a shell command
+    - touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600  
+                                                       # Create a file /tmp/healthy, keep it for 30s, then delete it and sleep for 600s
+    livenessProbe:                                     # Defines a liveness probe for health checks
+      exec:                                            # Type of probe: execute a command in the container
+        command:                                       # Command to run inside the container
+        - cat                                          # Command: cat (print file contents)
+        - /tmp/healthy                                 # File checked by the liveness probe
+      initialDelaySeconds: 5                           # Wait 5 seconds before running the first probe
+      periodSeconds: 5                                 # Run the probe every 5 seconds thereafter
+
+# liveness probe will restart the pod if the probe fails
+# in liveness probe, if the probe fails, the pod will be restarted
+
+# k describe pod liveness-command
+  # Normal   Created    72s                   kubelet            Created container: liveness
+  # Normal   Started    72s                   kubelet            Started container liveness
+  # Warning  Unhealthy  31s (x3 over 41s)     kubelet            Liveness probe failed: cat: can't open '/tmp/healthy': No such file or directory
+  # Normal   Killing    31s                   kubelet            Container liveness failed liveness probe, will be restarted
+  # Normal   Pulling    1s (x2 over 75s)      kubelet            Pulling image "docker.io/library/busybox:1.36"

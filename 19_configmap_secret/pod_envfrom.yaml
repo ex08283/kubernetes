@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: envfrom-pod
+  labels:
+    name: myapp-pod
+spec:
+  containers:             # list of main containers
+  - name: app-container   # Main application container
+    image: busybox:1.28 # Using a lightweight image, runs a simple shell comm and then exits
+    envFrom:
+    - configMapRef:
+        name: cm-yaml-envfrom
+    command: ["sh", "-c", "echo Hello from the app container; sleep 3600"]   # command container runs
+

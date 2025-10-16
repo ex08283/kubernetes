@@ -1,0 +1,22 @@
+apiVersion: v1                                          # API version for core Kubernetes resources
+kind: Pod                                               # Defines this object as a Pod
+metadata:
+  name: readyhttpget                                         # Name of the Pod
+  labels:
+    test: liveness                                      # Label used to identify or filter this Pod
+
+spec:
+  containers:                                           # List of containers that will run inside this Pod
+  - name: liveness                                      # Name of the container
+    image: registry.k8s.io/e2e-test-images/agnhost:2.40 # Container image used (agnhost includes test utilities like HTTP server)
+    args:
+    - liveness                                          # Run the "liveness" subcommand of agnhost (starts an HTTP server for probing)
+    readinessProbe:                                     # Defines a readiness probe for container health checks
+      httpGet:                                          # Probe type: send HTTP GET requests to the container
+        path: /healthz                                  # URL path to check on the container
+        port: 8080                                      # Port number where the HTTP server is listening
+      initialDelaySeconds: 5                            # Wait 5 seconds after the container starts before the first probe
+      periodSeconds: 5                                  # Run the readiness check every 5 seconds
+
+# pod will be running, but not ready because readiness probe is failing and will not be serving traffic
+# in readyness probe, the pod wil not be restarted if the probe fails, it will just be marked as not ready and removed from service endpoints

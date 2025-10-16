@@ -1,0 +1,55 @@
+# -------------------------------
+# Deployment: Runs the PHP + Apache app
+# -------------------------------
+apiVersion: apps/v1        # API version for Deployments
+kind: Deployment            # This defines a Deployment resource
+metadata:
+  name: php-apache          # Name of the Deployment
+
+spec:
+  #replicas: 1               # by default, run 1 Pod so can be omitted
+  selector:                 # Defines which Pods this Deployment manages
+    matchLabels:
+      run: php-apache       # Matches Pods with the label 'run=php-apache'
+
+  template:                 # Pod template — defines how each Pod looks
+    metadata:
+      labels:
+        run: php-apache     # Adds the 'run=php-apache' label to the Pods
+
+    spec:
+      containers:           # List of containers running inside each Pod
+      - name: php-apache    # Container name
+        image: registry.k8s.io/hpa-example   # The container image (PHP+Apache demo app)
+        
+        ports:
+        - containerPort: 80 # Exposes port 80 inside the container (HTTP)
+
+        resources:          # Resource requests and limits
+          requests:
+            cpu: 200m       # Minimum CPU guaranteed (0.2 cores)
+          limits:
+            cpu: 500m       # Maximum CPU allowed (0.5 cores)
+
+
+# -------------------------------
+# Service: Exposes the Deployment to the cluster
+# requests are sent to the Service, which forwards them to the Pods that match the selector
+# -------------------------------
+---
+apiVersion: v1              # API version for Services
+kind: Service               # This defines a Service resource
+
+metadata:
+  name: php-apache          # Name of the Service
+  labels:
+    run: php-apache         # Label (for organization and matching)
+
+spec:
+  ports:
+  - port: 80                # The port the Service exposes inside the cluster. Other pods inside the cluster can access this Service on this port.
+#    targetPort: 80          # The port on the Pod that the Service should forward traffic to (containerPort), if the same as 'port', this can be omitted.
+  selector:
+    run: php-apache         # Tells the Service which Pods to send traffic to
+                            # (matches Pods with the label 'run=php-apache')
+  #type: ClusterIP           # Service type (ClusterIP is default, exposes on a cluster-internal IP)

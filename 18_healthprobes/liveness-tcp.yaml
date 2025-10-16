@@ -1,0 +1,31 @@
+apiVersion: v1                                         # API version for core Kubernetes resources
+kind: Pod                                              # Defines this object as a Pod
+metadata:
+  name: tcp                                            # Name of the Pod
+  labels:
+    app: tcp-pod                                       # Label used to identify or group this Pod
+
+spec:
+  containers:                                          # List of containers inside the Pod
+  - name: goproxy                                      # Name of the container
+    image: registry.k8s.io/goproxy:0.1                 # Image used (goproxy — a simple Go-based proxy server)
+    ports:                                             # List of ports exposed by this container
+    - containerPort: 8080                              # Port 8080 is open inside the container for network traffic
+
+    livenessProbe:                                     # Defines a liveness probe to check container health
+      tcpSocket:                                       # Probe type: use TCP socket connection
+        port: 3000                                     # TCP port to attempt connection to
+      initialDelaySeconds: 5                           # Wait 5 seconds after container starts before running first probe
+      periodSeconds: 5                                 # Run the liveness check every 5 seconds
+      #failureThreshold: 3                             # Consider the container unhealthy after 3 consecutive failures
+      #successThreshold: 1                             # Consider the container healthy after 1 successful check
+
+# liveness probe will restart the pod if the probe fails
+# in liveness probe, if the probe fails, the pod will be restarted
+
+# k describe pod tcp
+  # Normal   Started    1s (x2 over 16s)  kubelet            Started container goproxy
+  # Warning  Unhealthy  1s (x3 over 11s)  kubelet            Liveness probe failed: dial tcp 10.244.1.16:3000: connect: connection refused
+  # Normal   Killing    1s                kubelet            Container goproxy failed liveness probe, will be restarted
+
+# probe is failing because goproxy port 8080 is open, but liveness probe is trying to connect to port 3000 which is closed
