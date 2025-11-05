@@ -1,0 +1,17 @@
+# this config file contains all config fields with comments
+# NOTE: this is not a particularly useful config file
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+# 1 control plane node and 3 workers
+nodes:
+# the control plane node config
+- role: control-plane
+  extraPortMappings:     # extra port mappings because it is a kind cluster
+    - containerPort: 30001
+      hostPort: 30001
+# the three workers
+- role: worker
+- role: worker
+networking:
+  disableDefaultCNI: true  # disable the default CNI (Container Network Interface) plugin. So that the cluster can use a custom CNI like weavenet.
+  podSubnet: 192.168.0.0/16  # specify the subnet for pod IP addresses

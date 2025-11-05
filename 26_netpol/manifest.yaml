@@ -1,0 +1,103 @@
+# ---------------------- FRONTEND POD ----------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend              # Name of the Pod
+  labels:
+    role: frontend            # Label used to identify this Pod for the Service selector
+spec:
+  containers:
+  - name: nginx               # Container name inside the Pod
+    image: nginx              # Using the official NGINX web server image
+    ports:
+    - name: http              # Name of the port (useful when referencing by name)
+      containerPort: 80       # Port exposed by the NGINX container (default HTTP port)
+      protocol: TCP           # Communication uses the TCP protocol (reliable, connection-based)
+---
+# ---------------------- FRONTEND SERVICE ----------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend              # Name of the Service that exposes the frontend Pod
+  labels:
+    role: frontend            # Label to categorize this Service
+spec:
+  selector:
+    role: frontend            # Matches Pods with label "role: frontend"
+  ports:
+  - protocol: TCP             # Service communicates using TCP
+    port: 80                  # Port exposed by the Service (clients connect here)
+    targetPort: 80            # Port on the Pod that the Service forwards traffic to
+                              # (In this case, the NGINX container’s port 80)
+---
+# ---------------------- BACKEND POD ----------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend               # Name of the Pod for the backend tier
+  labels:
+    role: backend             # Label used to identify this Pod for the backend Service
+spec:
+  containers:
+  - name: nginx               # Container name
+    image: nginx              # Also uses NGINX for simplicity
+    ports:
+    - name: http              # Named port
+      containerPort: 80       # Exposes port 80 for HTTP
+      protocol: TCP           # TCP communication
+---
+# ---------------------- BACKEND SERVICE ----------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend               # Service name for the backend tier
+  labels:
+    role: backend             # Label for organizational purposes
+spec:
+  selector:
+    role: backend             # Targets Pods with "role: backend"
+  ports:
+  - protocol: TCP             # TCP protocol for backend traffic
+    port: 80                  # Clients connect to the Service on port 80
+    targetPort: 80            # Routes traffic to container port 80 inside backend Pod
+---
+# ---------------------- DATABASE SERVICE ----------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: db                    # Name of the Service that exposes MySQL
+  labels:
+    name: mysql               # Label to identify this Service
+spec:
+  selector:
+    name: mysql               # Selects the MySQL Pod based on its label
+  ports:
+  - protocol: TCP             # TCP is used since MySQL uses persistent connections
+    port: 3306                # Port exposed by the Service (clients connect here)
+    targetPort: 3306          # Port on the MySQL container receiving traffic
+                              # 3306 is the default port for MySQL
+---
+# ---------------------- MYSQL POD ----------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql                 # Name of the Pod running MySQL
+  labels:
+    name: mysql               # Label used by the db Service to target this Pod
+spec:
+  containers:
+    - name: mysql             # Container name
+      image: mysql:latest     # Official MySQL image
+      env:                    # Environment variables to configure the database
+        - name: "MYSQL_USER"
+          value: "mysql"      # Creates a user named "mysql"
+        - name: "MYSQL_PASSWORD"
+          value: "mysql"      # Sets the password for the "mysql" user
+        - name: "MYSQL_DATABASE"
+          value: "testdb"     # Creates a default database called "testdb"
+        - name: "MYSQL_ROOT_PASSWORD"
+          value: "verysecure" # Sets the root password for MySQL
+      ports:
+        - name: http          # (Misleading name; could be changed to 'mysql' for clarity)
+          containerPort: 3306 # Exposes MySQL’s default port for connections
+          protocol: TCP       # Uses TCP for reliable client-server communication
