@@ -1,0 +1,19 @@
+# This yaml file defines a RoleBinding in Kubernetes
+apiVersion: rbac.authorization.k8s.io/v1  # this is a core api group not a named one
+kind: RoleBinding
+metadata:
+  name: read-pods-binding  # Name of the RoleBinding
+  namespace: default  # RoleBindings are namespace-scoped
+subjects:     # subjects to bind the role to
+- kind: User  # could be User, Group, or ServiceAccount
+  name: Adam  # Name of the user to bind the role to, this should match the CN in the certificate
+  apiGroup: rbac.authorization.k8s.io  # API group for the subject
+roleRef:      # reference to the Role being bound
+  kind: Role  # could be Role or ClusterRole  
+  name: pod-reader  # Name of the Role to bind
+  apiGroup: rbac.authorization.k8s.io  # API group for the role
+# This RoleBinding grants the "pod-reader" Role to the user "adam" in the "default" namespace
+
+# The user "adam" will have to be created and authenticated separately, as RoleBindings do not create users.
+# This RoleBinding assumes that a Role named "pod-reader" already exists in the "default" namespace.
+# You can create the user "adam" using a CertificateSigningRequest (CSR) as shown in the 21_ssl/adam.yaml file.

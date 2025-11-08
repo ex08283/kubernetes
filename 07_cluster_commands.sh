@@ -10,6 +10,10 @@ kind create cluster \
   --name cka-cluster2 \
   --config cluster_config.yaml
 
+# List all kind clusters
+kind get clusters
+
+# Delete a kind cluster
 kind delete cluster --name cka-cluster2
 
 # Step 2: Get nodes

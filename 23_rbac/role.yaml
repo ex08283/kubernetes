@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1  # this is a core api group not a named one
+kind: Role
+metadata:
+  namespace: default  # Roles are namespace-scoped
+  name: pod-reader  # Name of the Role
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods"]     # Resource this role applies to
+  verbs: ["get", "watch", "list"]   # These allowed actions
+
+
+# this role allows read-only access to pods within the default namespace 
+
