@@ -1,0 +1,17 @@
+# The data persists, because emptyDir is tied to the pod lifecycle, not the container lifecycle.
+# What would cause the data to be lost: Pod is deleted:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-pod
+spec:
+  containers:
+    - name: redis-container
+      image: redis
+      volumeMounts:
+        - name: redis-storage      # Mounted volume reference
+          mountPath: /data/redis   # Path inside the container
+  volumes:
+    - name: redis-storage
+      emptyDir: {}                 # Temporary directory on the node, belongs at the pod level, 
+                                   # because volumes are shared resources available to all containers in the pod.
