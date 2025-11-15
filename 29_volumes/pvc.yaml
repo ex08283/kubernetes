@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim   # Defines a PersistentVolumeClaim (PVC) in Kubernetes — a request for storage by a user
+metadata:
+  name: pv-claim         # Name of the PVC
+spec:
+  accessModes:
+    - ReadWriteOnce      # Access mode: volume can be mounted read/write by a single node at a time
+  resources:
+    requests:
+      storage: 500Mi     # Amount of storage requested by the PVC

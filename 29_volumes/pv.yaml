@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolume   # Defines a PersistentVolume (PV) in Kubernetes — a piece of storage in the cluster
+metadata:
+  name: pv-volume        # Name of the PV
+  labels:
+    type: local          # Label for categorization; useful for selecting PVs via PVCs
+spec:
+  capacity:
+    storage: 1Gi         # The total storage size available for this PV
+  accessModes:
+    - ReadWriteOnce      # Access mode: volume can be mounted read/write by a single node at a time
+  hostPath:
+    path: "/home/ubuntu/29_volume"  
+    # <-- hostPath refers to a directory on the **node's filesystem**, not inside the container
+    #     This directory must exist on the node; Kubernetes will mount it into the pod
+    #     Example: when a pod mounts this PV, the container sees the path as whatever mountPath you define
+    #     Storage is persistent **only as long as the pod stays on this node**; moving the pod to another node loses the data
+    #     it does not work for multi-node clusters unless the path is shared (e.g., via NFS)
+    # that why we will explore storage classes and dynamic provisioning later

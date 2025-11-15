@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pv-pod
+spec:
+  containers:
+    - name: pd-container
+      image: nginx
+      volumeMounts:
+        - name: pv-storage            # Mounted volume reference
+          mountPath: "/usr/share/nginx/html"  # Path inside the container where the volume is mounted
+      ports:
+        - containerPort: 80
+          name: http-server
+  volumes:
+    - name: pv-storage
+      persistentVolumeClaim:        # Reference to the PersistentVolumeClaim
+        claimName: pv-claim         # Name of the PVC to use for this volume
+  nodeName: master          # Optional: specify the node to schedule the pod on (useful for hostPath PVs)       
+       
+        # This links the pod's volume to the PVC, which in turn links to the PV
+        # The data stored in the PV will be accessible inside the container at /usr/share/nginx/html
+        # This setup allows the nginx container to serve content stored in the PV through the PVC
+        # The data will persist as long as the PV exists and is bound to the PVC  
+        # even if the pod is deleted and recreated
+        # Note: The actual storage location is on the node's filesystem as defined in the PV (hostPath) 
+        # In this case, it's /home/ubuntu/29_volume on the node
+        # Ensure that the PV and PVC are created before this pod to avoid binding issues
+

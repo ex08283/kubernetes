@@ -1,0 +1,63 @@
+# ---------------------- FRONTEND POD ----------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx              # Name of the Pod
+  labels:
+    role: nginx            # Label used to identify this Pod for the Service selector
+spec:
+  containers:
+  - name: nginx               # Container name inside the Pod
+    image: nginx              # Using the official NGINX web server image
+    ports:
+    - name: http              # Name of the port (useful when referencing by name)
+      containerPort: 80       # Port exposed by the NGINX container (default HTTP port)
+      protocol: TCP           # Communication uses the TCP protocol (reliable, connection-based)
+---
+# ---------------------- FRONTEND SERVICE ----------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx              # Name of the Service that exposes the frontend Pod
+  labels:
+    role: frontend            # Label to categorize this Service
+spec:
+  selector:
+    role: nginx            # Matches Pods with label "role: frontend"
+  ports:
+  - protocol: TCP             # Service communicates using TCP
+    port: 80                  # Port exposed by the Service (clients connect here)
+    targetPort: 80            # Port on the Pod that the Service forwards traffic to
+                              # (In this case, the NGINX container’s port 80)
+---
+# ---------------------- FRONTEND POD ----------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx1              # Name of the Pod
+  labels:
+    role: nginx1            # Label used to identify this Pod for the Service selector
+spec:
+  containers:
+  - name: nginx               # Container name inside the Pod
+    image: nginx              # Using the official NGINX web server image
+    ports:
+    - name: http              # Name of the port (useful when referencing by name)
+      containerPort: 80       # Port exposed by the NGINX container (default HTTP port)
+      protocol: TCP           # Communication uses the TCP protocol (reliable, connection-based)
+---
+# ---------------------- FRONTEND SERVICE ----------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx1              # Name of the Service that exposes the frontend Pod
+  labels:
+    role: nginx1            # Label to categorize this Service
+spec:
+  selector:
+    role: nginx1            # Matches Pods with label "role: frontend"
+  ports:
+  - protocol: TCP             # Service communicates using TCP
+    port: 80                  # Port exposed by the Service (clients connect here)
+    targetPort: 80            # Port on the Pod that the Service forwards traffic to
+                              # (In this case, the NGINX container’s port 80)
