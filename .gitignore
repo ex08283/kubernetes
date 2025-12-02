@@ -44,3 +44,11 @@ override.tf.json
 # Sensitive auto-generated files
 .terraformrc
 terraform.rc
+
+
+*.pyc
+project.lock.json
+bin/
+obj/
+.vs/
+node_modules/
